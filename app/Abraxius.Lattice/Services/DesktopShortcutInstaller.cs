@@ -1,5 +1,6 @@
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -273,10 +274,20 @@ public static class DesktopShortcutInstaller
     private static (string FileName, string Arguments) ResolveLaunchSpec()
     {
         var processPath = Environment.ProcessPath ?? throw new InvalidOperationException("The process path is unavailable.");
-        var arguments = Environment.GetCommandLineArgs();
-        if (arguments.Length > 0 && arguments[0].EndsWith(".dll", StringComparison.OrdinalIgnoreCase))
+        if (string.Equals(
+                Path.GetFileNameWithoutExtension(processPath),
+                "dotnet",
+                StringComparison.OrdinalIgnoreCase))
         {
-            return (processPath, QuoteProcessArg(arguments[0]));
+            var assemblyPath = Assembly.GetEntryAssembly()?.Location;
+            if (!string.IsNullOrWhiteSpace(assemblyPath) && File.Exists(assemblyPath))
+            {
+                // Keep the host explicit because development machines may
+                // have only a newer runtime installed. RollForward in the
+                // runtimeconfig is authoritative; this flag also covers
+                // older already-built output while it is being refreshed.
+                return (processPath, "--roll-forward Major " + QuoteProcessArg(assemblyPath));
+            }
         }
 
         return (processPath, string.Empty);
