@@ -49,6 +49,7 @@ public sealed class DesktopIntegrationService : IDisposable
                 IsVisible = true,
                 Menu = CreateTrayMenu(),
             };
+            _trayIcon.Clicked += OnTrayIconClicked;
             TrayIcon.SetIcons(Application.Current!, new TrayIcons { _trayIcon });
         }
         catch (Exception exception) when (exception is PlatformNotSupportedException or InvalidOperationException)
@@ -124,6 +125,8 @@ public sealed class DesktopIntegrationService : IDisposable
         _window.Hide();
     }
 
+    private void OnTrayIconClicked(object? sender, EventArgs e) => ShowWindow();
+
     private void OnWindowClosed(object? sender, EventArgs e) => Dispose();
 
     private void OnWorkspaceSelected(string workspacePath) => _daemon.OpenWorkspace(workspacePath);
@@ -151,6 +154,10 @@ public sealed class DesktopIntegrationService : IDisposable
             viewModel.Dispose();
         }
         _daemon.Dispose();
+        if (_trayIcon is not null)
+        {
+            _trayIcon.Clicked -= OnTrayIconClicked;
+        }
         _trayIcon?.Dispose();
         _trayIcon = null;
     }
