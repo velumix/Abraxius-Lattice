@@ -1,0 +1,27 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:Abraxius.Lattice.ViewModels"
+    xmlns:controls="using:Abraxius.Lattice.Controls"
+    x:Class="Abraxius.Lattice.Views.TimelineView"
+    x:DataType="vm:TimelineViewModel">
+    <Grid RowDefinitions="48,*">
+        <Border Grid.Row="0" Background="{DynamicResource Lattice.Surface}" BorderBrush="{DynamicResource Lattice.Border}" BorderThickness="0,0,0,1">
+            <Grid Margin="10,0" ColumnDefinitions="Auto,Auto,1,Auto,*,Auto" ColumnSpacing="6">
+                <Button Grid.Column="0" Classes="Ghost" Command="{Binding ZoomOutCommand}" Content="−" />
+                <Button Grid.Column="1" Classes="Ghost" Command="{Binding ZoomInCommand}" Content="+" />
+                <Separator Grid.Column="2" Width="1" Margin="5,10" />
+                <Button Grid.Column="3" Classes="Ghost" Command="{Binding FitTraceCommand}" Content="Fit trace" />
+                <TextBlock Grid.Column="5" Classes="Meta" VerticalAlignment="Center" Text="{Binding TraceSummary}" />
+            </Grid>
+        </Border>
+        <controls:TimelineSurface
+            Grid.Row="1"
+            Trace="{Binding Trace}"
+            Viewport="{Binding Viewport}"
+            Tracks="{Binding VisibleTracks}"
+            Selection="{Binding SelectedRange}"
+            Background="{DynamicResource Lattice.Background}"
+            GridBrush="{DynamicResource Lattice.Border}" />
+    </Grid>
+</UserControl>

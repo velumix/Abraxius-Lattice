@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Search · {{ config.title }}{% endblock title %}
+{% block content %}
+<article>
+  <header class="page-header"><h1>Search</h1><p class="lede">Search human-written guides and generated Lattice reference pages.</p></header>
+  <label class="search-label" for="site-search">Search documentation</label>
+  <input id="site-search" class="search-input" type="search" placeholder="Try Studio MCP, capability, provider, or CLI" autocomplete="off">
+  <div id="search-results" class="search-results" aria-live="polite"></div>
+</article>
+<script src="{{ get_url(path='elasticlunr.min.js', trailing_slash=false) }}"></script>
+<script src="{{ get_url(path='search_index.en.js', trailing_slash=false) }}"></script>
+<script src="{{ get_url(path='search.js', trailing_slash=false) }}"></script>
+{% endblock content %}

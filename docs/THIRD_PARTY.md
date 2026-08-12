@@ -1,0 +1,5 @@
+# Third-party software
+
+Direct third-party software and its purpose are recorded in [DEPENDENCIES.md](DEPENDENCIES.md). The official Luau source is present only as the pinned `native/luau` Git submodule and retains its upstream MIT license and notices. No source from Roblox's archived Studio Rust MCP server was copied; it was read as architectural research only.
+
+`sysinfo` 0.39.6 (MIT) supplies native process snapshots. `dirs` 6.0.0 (MIT OR Apache-2.0) supplies standard host directories and the Windows Known Folder implementation. Axum 0.8.9 (MIT) supplies the loopback-only Studio companion HTTP service. Fusion `v0.3-beta` at commit `77e603534ff4013f4049611826ff0309d6000b15` (MIT) is vendored as a Git submodule and packaged into the Studio plugin. Rojo 7.7.0, StyLua 2.5.2, and Selene 0.31.0 are exact-pinned native development tools. `Cargo.lock` is the authoritative transitive Rust version inventory for this bootstrap. Distribution must include all notices required by the final `LICENSE_AUDIT.md` review.

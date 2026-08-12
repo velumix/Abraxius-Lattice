@@ -1,0 +1,24 @@
+[package]
+name = "lattice-docgen"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[[bin]]
+name = "lattice-docgen"
+path = "src/main.rs"
+
+[dependencies]
+clap.workspace = true
+lattice-cli = { path = "../lattice-cli" }
+lattice-mcp = { path = "../lattice-mcp" }
+lattice-model = { path = "../lattice-model" }
+lattice-platform = { path = "../lattice-platform" }
+lattice-tools = { path = "../lattice-tools" }
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+
+[lints]
+workspace = true

@@ -1,0 +1,28 @@
+base_url = "https://abraxius.github.io/lattice"
+title = "Lattice Documentation"
+description = "Native, deterministic Roblox development infrastructure."
+default_language = "en"
+compile_sass = false
+build_search_index = true
+generate_feeds = true
+minify_html = true
+
+[markdown]
+smart_punctuation = false
+
+[markdown.highlighting]
+theme = "github-dark"
+style = "inline"
+
+[search]
+include_title = true
+include_description = true
+include_content = true
+
+[link_checker]
+skip_prefixes = ["https://github.com/abraxius/lattice/"]
+
+[extra]
+product_name = "Lattice"
+repository_url = "https://github.com/abraxius/lattice"
+source_branch = "main"

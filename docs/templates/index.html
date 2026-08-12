@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}{{ config.title }}{% endblock title %}
+{% block content %}
+<section class="hero">
+  <span class="eyebrow">NATIVE ROBLOX DEVELOPMENT INFRASTRUCTURE</span>
+  <h1>Structure, runtime history, and tools in one deterministic layer.</h1>
+  <p class="lede">Lattice understands Roblox projects, Studio environments, execution history, and connected tools without hiding platform mechanics from the systems that need to be correct.</p>
+  <div class="hero-actions"><a class="button primary" href="{{ get_url(path='getting-started/', trailing_slash=true) }}">Start here</a><a class="button" href="{{ get_url(path='architecture/', trailing_slash=true) }}">Read architecture</a></div>
+</section>
+<section class="home-grid">
+  <a class="link-card" href="{{ get_url(path='studio/', trailing_slash=true) }}"><strong>Roblox Studio</strong><span>Environment resolution, Studio MCP, and Vinegar support.</span></a>
+  <a class="link-card" href="{{ get_url(path='tool-fabric/', trailing_slash=true) }}"><strong>Tool Fabric</strong><span>Providers, schemas, capabilities, deterministic routing, and results.</span></a>
+  <a class="link-card" href="{{ get_url(path='reference/', trailing_slash=true) }}"><strong>Reference</strong><span>Generated CLI, MCP, capability, provider, configuration, and error contracts.</span></a>
+  <a class="link-card" href="{{ get_url(path='security/', trailing_slash=true) }}"><strong>Security</strong><span>Trust boundaries, policy, credentials, revisions, and audit.</span></a>
+</section>
+{% endblock content %}

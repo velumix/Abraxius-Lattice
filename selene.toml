@@ -1,0 +1,6 @@
+std = "roblox"
+exclude = ["vendor/**", "plugin/LatticeCompanion/dist/**"]
+
+[rules]
+multiple_statements = "allow"
+shadowing = "allow"

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="{{ config.description }}">
+  <title>{% block title %}{{ config.title }}{% endblock title %}</title>
+  <link rel="icon" type="image/png" href="{{ get_url(path='lattice.png', trailing_slash=false) }}">
+  <link rel="stylesheet" href="{{ get_url(path='lattice.css', trailing_slash=false) }}">
+  <link rel="stylesheet" href="{{ get_url(path='logo.css', trailing_slash=false) }}">
+  <link rel="alternate" type="application/atom+xml" title="{{ config.title }}" href="{{ get_url(path='atom.xml', trailing_slash=false) }}">
+</head>
+<body>
+  <a class="skip-link" href="#content">Skip to content</a>
+  <header class="site-header">
+    <div class="shell header-inner">
+      <a class="brand" href="{{ get_url(path='', trailing_slash=true) }}" aria-label="Lattice home">
+        <img class="brand-mark" src="{{ get_url(path='lattice.png', trailing_slash=false) }}" alt="">
+        <span>LATTICE</span>
+      </a>
+      <nav class="top-nav" aria-label="Primary navigation">
+        <a href="{{ get_url(path='getting-started/', trailing_slash=true) }}">Getting Started</a>
+        <a href="{{ get_url(path='architecture/', trailing_slash=true) }}">Architecture</a>
+        <a href="{{ get_url(path='mcp/', trailing_slash=true) }}">MCP</a>
+        <a href="{{ get_url(path='reference/', trailing_slash=true) }}">Reference</a>
+        <a href="{{ get_url(path='search/', trailing_slash=true) }}">Search</a>
+      </nav>
+    </div>
+  </header>
+  <div class="shell layout">
+    <aside class="sidebar" aria-label="Documentation navigation">
+      <div class="sidebar-title">Documentation</div>
+      <nav>
+        <a href="{{ get_url(path='getting-started/', trailing_slash=true) }}">Getting Started</a>
+        <a href="{{ get_url(path='concepts/', trailing_slash=true) }}">Concepts</a>
+        <a href="{{ get_url(path='architecture/', trailing_slash=true) }}">Architecture</a>
+        <a href="{{ get_url(path='studio/', trailing_slash=true) }}">Roblox Studio</a>
+        <a href="{{ get_url(path='platform/', trailing_slash=true) }}">Platform</a>
+        <a href="{{ get_url(path='mcp/', trailing_slash=true) }}">MCP</a>
+        <a href="{{ get_url(path='tool-fabric/', trailing_slash=true) }}">Tool Fabric</a>
+        <a href="{{ get_url(path='flight-recorder/', trailing_slash=true) }}">Flight Recorder</a>
+        <a href="{{ get_url(path='editor/', trailing_slash=true) }}">Editor</a>
+        <a href="{{ get_url(path='cli/', trailing_slash=true) }}">CLI</a>
+        <a href="{{ get_url(path='security/', trailing_slash=true) }}">Security</a>
+        <a href="{{ get_url(path='development/', trailing_slash=true) }}">Development</a>
+        <a href="{{ get_url(path='reference/', trailing_slash=true) }}">Reference</a>
+        <a href="{{ get_url(path='adr/', trailing_slash=true) }}">ADRs</a>
+      </nav>
+    </aside>
+    <main id="content" class="content">
+      {% block content %}{% endblock content %}
+    </main>
+  </div>
+  <footer class="site-footer shell">
+    <span>Lattice documentation</span>
+    <span>Generated and validated with native Rust + Zola</span>
+    <a href="{{ config.extra.repository_url }}">Source</a>
+  </footer>
+</body>
+</html>

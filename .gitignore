@@ -1,0 +1,10 @@
+/target/
+docs/public/
+/.lattice/
+**/.lattice/
+/plugin/LatticeCompanion/dist/
+**/bin/
+**/obj/
+*.user
+*.suo
+.DS_Store

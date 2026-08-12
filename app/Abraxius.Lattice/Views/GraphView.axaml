@@ -1,0 +1,28 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:Abraxius.Lattice.ViewModels"
+    xmlns:controls="using:Abraxius.Lattice.Controls"
+    x:Class="Abraxius.Lattice.Views.GraphView"
+    x:DataType="vm:GraphViewModel">
+    <Grid RowDefinitions="48,*">
+        <Border Grid.Row="0" Background="{DynamicResource Lattice.Surface}" BorderBrush="{DynamicResource Lattice.Border}" BorderThickness="0,0,0,1">
+            <Grid Margin="10,0" ColumnDefinitions="Auto,Auto,Auto,1,Auto,Auto,*,Auto" ColumnSpacing="6">
+                <Button Grid.Column="0" Classes="Ghost" Command="{Binding BackCommand}" Content="Back" />
+                <Button Grid.Column="1" Classes="Ghost" Command="{Binding ForwardCommand}" Content="Forward" />
+                <Button Grid.Column="2" Classes="Ghost" Command="{Binding FocusCommand}" Content="Focus" />
+                <Separator Grid.Column="3" Width="1" Margin="5,10" />
+                <Button Grid.Column="4" Classes="Ghost" Command="{Binding FitGraphCommand}" Content="Fit" />
+                <Button Grid.Column="5" Classes="Ghost" Command="{Binding ResetZoomCommand}" Content="100%" />
+                <TextBlock Grid.Column="7" Classes="Meta" VerticalAlignment="Center" Text="{Binding VisibleGraphSummary}" />
+            </Grid>
+        </Border>
+        <controls:GraphSurface
+            Grid.Row="1"
+            Graph="{Binding Graph}"
+            Selection="{Binding Selection}"
+            Camera="{Binding Camera}"
+            Background="{DynamicResource Lattice.Background}"
+            GridBrush="{DynamicResource Lattice.Border}" />
+    </Grid>
+</UserControl>

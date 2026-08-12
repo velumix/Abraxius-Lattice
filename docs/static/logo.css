@@ -1,0 +1,9 @@
+.brand-mark {
+  display: block;
+  width: 27px;
+  height: 27px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  object-fit: contain;
+  background: var(--surface);
+}
