@@ -956,7 +956,7 @@ where
             let executable = process.executable.as_ref()?;
             let path = executable.as_path();
             let file_name = path.file_name()?.to_string_lossy();
-            let (root, candidate) = if file_name.eq_ignore_ascii_case("wine")
+            let (root, runtime_candidate) = if file_name.eq_ignore_ascii_case("wine")
                 || file_name.eq_ignore_ascii_case("wine64")
             {
                 let bin = path.parent()?;
@@ -973,13 +973,115 @@ where
             } else {
                 return None;
             };
-            let executable = HostPath::new(candidate);
-            self.is_file(&executable).then_some(WineRuntime {
-                executable,
-                root: HostPath::new(root),
-                source_process_id: Some(process.pid),
-            })
+            let executable = HostPath::new(runtime_candidate);
+            if self.is_file(&executable) {
+                return Some(WineRuntime {
+                    executable,
+                    root: HostPath::new(root),
+                    source_process_id: Some(process.pid),
+                });
+            }
+
+            self.resolve_flatpak_wine_runtime(candidate, process)
         })
+    }
+
+    /// Resolves a Wine runtime whose executable is visible inside the
+    /// Flatpak namespace but not at the same path from the host. Vinegar's
+    /// packaged fork intentionally uses `/app/kombucha`; Lattice runs outside
+    /// that namespace and must correlate it with the installed app files.
+    fn resolve_flatpak_wine_runtime(
+        &self,
+        candidate: &StudioEnvironmentCandidate,
+        process: &ProcessSnapshot,
+    ) -> Option<WineRuntime> {
+        if candidate.runtime != StudioRuntime::VinegarFlatpak {
+            return None;
+        }
+
+        let process_path = process.executable.as_ref()?.as_path();
+        let guest_root = HostPath::new("/app/kombucha");
+        let relative_process_path = process_path.strip_prefix(guest_root.as_path()).ok()?;
+        if relative_process_path.as_os_str().is_empty() {
+            return None;
+        }
+
+        self.flatpak_wine_roots(candidate).into_iter().find_map(|root| {
+            let process_executable = root.join(relative_process_path);
+            let wine_executable = root.join("bin/wine");
+            (self.is_file(&process_executable) && self.is_file(&wine_executable)).then_some(
+                WineRuntime {
+                    executable: wine_executable,
+                    root,
+                    source_process_id: Some(process.pid),
+                },
+            )
+        })
+    }
+
+    fn flatpak_wine_roots(&self, candidate: &StudioEnvironmentCandidate) -> Vec<HostPath> {
+        let mut roots = Vec::new();
+
+        let mut flatpak_roots = Vec::new();
+        if let Some(home) = self.context.home_dir.as_ref() {
+            flatpak_roots.push(home.join(".local/share/flatpak"));
+        }
+        if let Some(data_local_dir) = self.context.data_local_dir.as_ref() {
+            flatpak_roots.push(data_local_dir.join("flatpak"));
+        }
+        flatpak_roots.push(HostPath::new("/var/lib/flatpak"));
+
+        for flatpak_root in flatpak_roots {
+            let app_root = flatpak_root.join(format!("app/{VINEGAR_FLATPAK_ID}"));
+            let Ok(architectures) = self.filesystem.read_directory(&app_root) else {
+                continue;
+            };
+            for architecture in architectures.into_iter().filter(|entry| entry.is_directory) {
+                let Ok(branches) = self.filesystem.read_directory(&architecture.path) else {
+                    continue;
+                };
+                for branch in branches.into_iter().filter(|entry| entry.is_directory) {
+                    if let Ok(active_commit) =
+                        self.filesystem.read_link(&branch.path.join("active"))
+                    {
+                        let active_root = active_commit.join("files/kombucha");
+                        if self.is_file(&active_root.join("bin/wine")) {
+                            roots.push(active_root);
+                        }
+                    }
+                    let Ok(commits) = self.filesystem.read_directory(&branch.path) else {
+                        continue;
+                    };
+                    roots.extend(
+                        commits
+                            .into_iter()
+                            .filter(|entry| entry.is_directory)
+                            .map(|entry| entry.path.join("files/kombucha"))
+                            .filter(|root| self.is_file(&root.join("bin/wine"))),
+                    );
+                }
+            }
+        }
+
+        if let Some(data_root) = candidate.data_root.as_ref()
+            && let Ok(entries) = self.filesystem.read_directory(data_root)
+        {
+            roots.extend(
+                entries
+                    .into_iter()
+                    .filter(|entry| entry.is_directory && entry.file_name.starts_with("kombucha"))
+                    .map(|entry| entry.path),
+            );
+        }
+
+        let mut unique_roots = Vec::new();
+        for root in roots {
+            if !unique_roots.contains(&root) {
+                unique_roots.push(root);
+            }
+        }
+        roots = unique_roots;
+        roots
     }
 
     fn resolve_known_path(

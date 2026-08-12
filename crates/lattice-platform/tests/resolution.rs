@@ -233,6 +233,39 @@ fn flatpak_wine_runtime_produces_an_experimental_stdio_launcher_from_resolved_ev
     Ok(())
 }
 
+#[cfg(unix)]
+#[test]
+fn flatpak_sandbox_wine_runtime_maps_to_host_installed_app_files()
+-> Result<(), Box<dyn std::error::Error>> {
+    let temporary = TempDir::new()?;
+    let home = HostPath::new(temporary.path());
+    let (data, prefix) = flatpak_vinegar_fixture(&home)?;
+    let deployment = data.join("versions/version-flatpak");
+    file(&deployment.join("StudioMCP.exe"))?;
+    std::os::unix::fs::symlink(temporary.path(), prefix.join("dosdevices/z:").as_path())?;
+
+    let installed_runtime = home
+        .join(".local/share/flatpak/app/org.vinegarhq.Vinegar/x86_64/master/commit/files/kombucha");
+    file(&installed_runtime.join("bin/wine"))?;
+    file(&installed_runtime.join("lib/wine/x86_64-unix/wine-preloader"))?;
+
+    let mut process = studio_process(53, &prefix, &deployment);
+    process.executable = Some(HostPath::new("/app/kombucha/lib/wine/x86_64-unix/wine-preloader"));
+    let resolver = PlatformResolver::new(
+        context(HostPlatform::Linux, &home),
+        RealFileSystem,
+        StaticProcesses(vec![process]),
+    );
+
+    let environment = &resolver.inspect()?.environments[0];
+    let wine = environment.wine_runtime.as_ref().ok_or("Wine runtime not resolved")?;
+    assert_eq!(wine.executable, installed_runtime.join("bin/wine"));
+    let launcher = environment.mcp_launcher.as_ref().ok_or("MCP launcher not resolved")?;
+    assert_eq!(launcher.executable, installed_runtime.join("bin/wine"));
+    assert!(launcher.experimental);
+    Ok(())
+}
+
 #[test]
 fn native_and_flatpak_remnants_are_ambiguous_without_process_evidence()
 -> Result<(), Box<dyn std::error::Error>> {
