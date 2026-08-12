@@ -33,8 +33,9 @@ the Rust rope through a custom Avalonia control; it does not use a TextBox or
 AvaloniaEdit. Studio-backed revision-safe save and semantic Luau integration
 are the next editor slices.
 
-The desktop integration installs a user-scoped launcher on startup. Closing
-the main window hides it to the native tray; use the tray menu's explicit
+The desktop integration refreshes a user-scoped launcher on every startup,
+including the current executable target and artwork. Closing the main window
+hides it to the native tray; use the tray menu's explicit
 `Exit Lattice` command to terminate the UI process. A user-scoped exclusive
 lock prevents a second desktop instance from starting while the tray instance
 is still alive. Left-clicking the tray icon restores the window.

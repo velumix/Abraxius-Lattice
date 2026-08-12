@@ -30,11 +30,14 @@ source without changing the XAML surface.
 
 ## Desktop lifecycle
 
-On startup the desktop integration service idempotently installs a user-scoped
-launcher. Linux receives an application-menu entry and, when the user's XDG
-desktop directory is available, `Abraxius Lattice.desktop` on the desktop. The
-Windows and macOS implementations use native user-scoped shortcut/application
-locations. No elevation or system-wide write is attempted.
+On every startup the desktop integration service refreshes a user-scoped
+launcher, including its current executable target and Lattice artwork. Linux
+receives an application-menu entry and, when the user's XDG desktop directory
+is available, `Abraxius Lattice.desktop` on the desktop. Linux icon filenames
+are content-hashed and the desktop/icon caches are refreshed so a new logo is
+visible without manually reinstalling the shortcut. The Windows and macOS
+implementations use native user-scoped shortcut/application locations. No
+elevation or system-wide write is attempted.
 
 The window close button is intentionally a hide operation. The process and
 daemon-facing state remain alive in the native tray. The tray menu provides

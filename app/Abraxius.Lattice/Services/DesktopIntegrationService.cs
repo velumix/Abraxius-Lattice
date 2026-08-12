@@ -58,9 +58,11 @@ public sealed class DesktopIntegrationService : IDisposable
             TraceUnavailable(exception);
         }
 
-        // Installation is idempotent and user-scoped. A denied/unavailable
-        // desktop must not prevent the workstation from launching.
-        _ = DesktopShortcutInstaller.Install();
+        // Refresh the launcher on every startup so a rebuilt/published app
+        // cannot leave the desktop pointing at an older executable or icon.
+        // A denied/unavailable desktop must not prevent the workstation from
+        // launching.
+        LogShortcutInstall(DesktopShortcutInstaller.Install());
     }
 
     public void ShowWindow()
@@ -93,7 +95,7 @@ public sealed class DesktopIntegrationService : IDisposable
         show.Click += (_, _) => ShowWindow();
 
         var install = new NativeMenuItem("Install desktop icon");
-        install.Click += (_, _) => _ = DesktopShortcutInstaller.Install();
+        install.Click += (_, _) => LogShortcutInstall(DesktopShortcutInstaller.Install());
 
         var exit = new NativeMenuItem("Exit Lattice");
         exit.Click += (_, _) => Exit();
@@ -136,6 +138,13 @@ public sealed class DesktopIntegrationService : IDisposable
 
     private static void TraceUnavailable(Exception exception) =>
         System.Diagnostics.Trace.TraceWarning("Lattice tray integration unavailable: {0}", exception.Message);
+
+    private static void LogShortcutInstall(ShortcutInstallResult result) =>
+        System.Diagnostics.Trace.TraceInformation(
+            "Lattice desktop launcher refresh: {0} ({1}) {2}",
+            result.Status,
+            result.Location ?? "no location",
+            result.Detail ?? "");
 
     public void Dispose()
     {
