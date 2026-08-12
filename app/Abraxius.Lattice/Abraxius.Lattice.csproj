@@ -1,0 +1,68 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="12.1.1" />
+    <PackageReference Include="Avalonia.Desktop" Version="12.1.1" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.1" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="12.1.1" />
+    <PackageReference Include="Material.Icons.Avalonia" Version="3.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AvaloniaResource Include="Assets\Lattice.png" />
+    <None Update="Assets\lattice.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+    <None Update="Assets\Lattice.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <LatticeRepositoryRoot>$(MSBuildProjectDirectory)/../..</LatticeRepositoryRoot>
+    <NativeEditorBuildOutput Condition="$([MSBuild]::IsOSPlatform('Windows'))">$(LatticeRepositoryRoot)/target/debug/lattice_editor_native.dll</NativeEditorBuildOutput>
+    <NativeEditorBuildOutput Condition="$([MSBuild]::IsOSPlatform('OSX'))">$(LatticeRepositoryRoot)/target/debug/liblattice_editor_native.dylib</NativeEditorBuildOutput>
+    <NativeEditorBuildOutput Condition="!$([MSBuild]::IsOSPlatform('Windows')) and !$([MSBuild]::IsOSPlatform('OSX'))">$(LatticeRepositoryRoot)/target/debug/liblattice_editor_native.so</NativeEditorBuildOutput>
+  </PropertyGroup>
+
+  <!-- Cargo owns the native editor build. Always refresh it for local builds
+       because MSBuild cannot infer which Rust source files changed. Set
+       SkipNativeEditorBuild=true for packaging environments that intentionally
+       ship a prebuilt native library. -->
+  <Target Name="BuildNativeEditor" BeforeTargets="Build"
+          Condition="'$(SkipNativeEditorBuild)' != 'true' and Exists('$(LatticeRepositoryRoot)/Cargo.toml')">
+    <Exec Command="cargo build -p lattice-editor-native --locked" WorkingDirectory="$(LatticeRepositoryRoot)" />
+  </Target>
+
+  <!-- The Rust editor is built by Cargo. When a local Cargo build exists,
+       carry the platform library next to the Avalonia executable so the
+       resolver can load it without environment-specific search paths. -->
+  <Target Name="CopyNativeEditorLibrary" AfterTargets="Build">
+    <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+      <NativeEditorLibrary Include="$(MSBuildProjectDirectory)/../../target/debug/lattice_editor_native.dll" />
+    </ItemGroup>
+    <ItemGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+      <NativeEditorLibrary Include="$(MSBuildProjectDirectory)/../../target/debug/liblattice_editor_native.dylib" />
+    </ItemGroup>
+    <ItemGroup Condition="!$([MSBuild]::IsOSPlatform('Windows')) and !$([MSBuild]::IsOSPlatform('OSX'))">
+      <NativeEditorLibrary Include="$(MSBuildProjectDirectory)/../../target/debug/liblattice_editor_native.so" />
+    </ItemGroup>
+    <Copy
+      SourceFiles="@(NativeEditorLibrary)"
+      DestinationFolder="$(OutDir)"
+      SkipUnchangedFiles="true"
+      Condition="@(NativeEditorLibrary) != '' and Exists('%(NativeEditorLibrary.Identity)')" />
+  </Target>
+
+</Project>

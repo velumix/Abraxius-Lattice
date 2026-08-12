@@ -1,0 +1,78 @@
+name: Lattice Documentation
+
+on:
+  pull_request:
+    paths:
+      - "docs/**"
+      - "crates/lattice-docgen/**"
+      - "crates/lattice-cli/**"
+      - "crates/lattice-mcp/**"
+      - "crates/lattice-model/**"
+      - "crates/lattice-tools/**"
+      - "crates/lattice-platform/**"
+      - "crates/lattice-studio/**"
+      - "Cargo.toml"
+      - "Cargo.lock"
+      - ".github/workflows/docs.yml"
+  push:
+    branches: [main]
+    paths:
+      - "docs/**"
+      - "crates/lattice-docgen/**"
+      - "crates/lattice-cli/**"
+      - "crates/lattice-mcp/**"
+      - "crates/lattice-model/**"
+      - "crates/lattice-tools/**"
+      - "crates/lattice-platform/**"
+      - "crates/lattice-studio/**"
+      - "Cargo.toml"
+      - "Cargo.lock"
+      - ".github/workflows/docs.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lattice-pages
+  cancel-in-progress: false
+
+jobs:
+  validate-and-build:
+    name: Generate and validate documentation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.1
+
+      - name: Install pinned Rust toolchain
+        run: rustup toolchain install 1.97.1 --profile minimal --no-self-update
+
+      - name: Check generated reference documentation
+        run: cargo +1.97.1 run --locked -p lattice-docgen -- check
+
+      # The official getzola action pins its implementation by commit and
+      # downloads the explicitly selected Zola release. It runs zola check
+      # before building and uploads the Pages artifact for the deploy job.
+      - name: Build Zola site
+        uses: getzola/github-pages@066755243e69f508fd1a74739fbf1a65f656c790
+        with:
+          working_directory: docs
+          zola_version: v0.23.3
+          check_links: true
+
+  deploy:
+    name: Deploy GitHub Pages
+    if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || github.event_name == 'workflow_dispatch'
+    needs: validate-and-build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy Pages artifact
+        id: deployment
+        uses: actions/deploy-pages@v4

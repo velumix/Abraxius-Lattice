@@ -1,0 +1,139 @@
+<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Style Selector="Window">
+        <Setter Property="Background" Value="{DynamicResource Lattice.Background}" />
+        <Setter Property="Foreground" Value="{DynamicResource Lattice.TextPrimary}" />
+    </Style>
+
+    <Style Selector="TextBlock.PageTitle">
+        <Setter Property="FontSize" Value="22" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{DynamicResource Lattice.TextPrimary}" />
+    </Style>
+
+    <Style Selector="TextBlock.SectionTitle">
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{DynamicResource Lattice.TextPrimary}" />
+    </Style>
+
+    <Style Selector="TextBlock.Body">
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="Foreground" Value="{DynamicResource Lattice.TextPrimary}" />
+    </Style>
+
+    <Style Selector="TextBlock.Secondary">
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="Foreground" Value="{DynamicResource Lattice.TextSecondary}" />
+    </Style>
+
+    <Style Selector="TextBlock.Meta">
+        <Setter Property="FontSize" Value="11" />
+        <Setter Property="Foreground" Value="{DynamicResource Lattice.TextMuted}" />
+    </Style>
+
+    <Style Selector="Ellipse.StudioPulse">
+        <Style.Animations>
+            <Animation Duration="0:0:1.6" IterationCount="Infinite">
+                <KeyFrame Cue="0%">
+                    <Setter Property="Opacity" Value="0.15" />
+                </KeyFrame>
+                <KeyFrame Cue="50%">
+                    <Setter Property="Opacity" Value="0.75" />
+                </KeyFrame>
+                <KeyFrame Cue="100%">
+                    <Setter Property="Opacity" Value="0.15" />
+                </KeyFrame>
+            </Animation>
+        </Style.Animations>
+    </Style>
+
+    <Style Selector="Border.Panel">
+        <Setter Property="Background" Value="{DynamicResource Lattice.Surface}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Lattice.Border}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="6" />
+    </Style>
+
+    <Style Selector="Border.PanelRaised">
+        <Setter Property="Background" Value="{DynamicResource Lattice.SurfaceRaised}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Lattice.Border}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="6" />
+    </Style>
+
+    <Style Selector="Button">
+        <Setter Property="MinHeight" Value="{StaticResource Lattice.ControlHeight}" />
+        <Setter Property="CornerRadius" Value="5" />
+        <Setter Property="Padding" Value="10,5" />
+        <Setter Property="FontSize" Value="12" />
+    </Style>
+
+    <Style Selector="Button.Ghost">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource Lattice.TextSecondary}" />
+        <Setter Property="BorderThickness" Value="0" />
+    </Style>
+
+    <Style Selector="Button.Ghost:pointerover">
+        <Setter Property="Background" Value="{DynamicResource Lattice.SurfaceHover}" />
+        <Setter Property="Foreground" Value="{DynamicResource Lattice.TextPrimary}" />
+    </Style>
+
+    <Style Selector="Button.Primary">
+        <Setter Property="Background" Value="{DynamicResource Lattice.AccentMuted}" />
+        <Setter Property="Foreground" Value="{DynamicResource Lattice.Accent}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Lattice.Accent}" />
+        <Setter Property="BorderThickness" Value="1" />
+    </Style>
+
+    <Style Selector="TextBox.CommandSearch">
+        <Setter Property="Height" Value="34" />
+        <Setter Property="Background" Value="{DynamicResource Lattice.SurfaceRaised}" />
+        <Setter Property="Foreground" Value="{DynamicResource Lattice.TextPrimary}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Lattice.Border}" />
+        <Setter Property="CornerRadius" Value="6" />
+        <Setter Property="Padding" Value="10,5" />
+    </Style>
+
+    <Style Selector="ListBox.NavRail">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="6" />
+    </Style>
+
+    <Style Selector="ListBox.NavRail ListBoxItem">
+        <Setter Property="Height" Value="44" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Margin" Value="0,2" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="CornerRadius" Value="6" />
+    </Style>
+
+    <Style Selector="ListBox.NavRail ListBoxItem:pointerover">
+        <Setter Property="Background" Value="{DynamicResource Lattice.SurfaceHover}" />
+    </Style>
+
+    <Style Selector="ListBox.NavRail ListBoxItem:selected">
+        <Setter Property="Background" Value="{DynamicResource Lattice.SurfaceSelected}" />
+    </Style>
+
+    <Style Selector="ListBox.DenseList">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+    </Style>
+
+    <Style Selector="ListBox.DenseList ListBoxItem">
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+    </Style>
+
+    <Style Selector="Separator">
+        <Setter Property="Background" Value="{DynamicResource Lattice.Border}" />
+    </Style>
+
+</Styles>

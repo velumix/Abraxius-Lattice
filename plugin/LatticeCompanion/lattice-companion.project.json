@@ -1,0 +1,15 @@
+{
+  "name": "LatticeCompanion",
+  "globIgnorePaths": [
+    "dist/**",
+    "README.md",
+    "lattice-companion.project.json",
+    "THIRD_PARTY_NOTICES.md"
+  ],
+  "tree": {
+    "$path": ".",
+    "Fusion": {
+      "$path": "../../vendor/fusion/default.project.json"
+    }
+  }
+}

@@ -1,0 +1,48 @@
+<Application
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:vm="using:Abraxius.Lattice.ViewModels"
+    xmlns:views="using:Abraxius.Lattice.Views"
+    x:Class="Abraxius.Lattice.App"
+    RequestedThemeVariant="Default">
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="avares://Abraxius.Lattice/Styles/LatticeTheme.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+
+    <Application.Styles>
+        <FluentTheme DensityStyle="Compact" />
+        <materialIcons:MaterialIconStyles />
+        <StyleInclude Source="avares://Abraxius.Lattice/Styles/LatticeStyles.axaml" />
+    </Application.Styles>
+
+    <Application.DataTemplates>
+        <DataTemplate DataType="vm:WorkspaceHomeViewModel">
+            <views:WorkspaceHomeView />
+        </DataTemplate>
+        <DataTemplate DataType="vm:WorkspaceExplorerViewModel">
+            <views:WorkspaceExplorerView />
+        </DataTemplate>
+        <DataTemplate DataType="vm:EditorViewModel">
+            <views:EditorView />
+        </DataTemplate>
+        <DataTemplate DataType="vm:ToolsViewModel">
+            <views:ToolsView />
+        </DataTemplate>
+        <DataTemplate DataType="vm:ConnectionsViewModel">
+            <views:ConnectionsView />
+        </DataTemplate>
+        <DataTemplate DataType="vm:GraphViewModel">
+            <views:GraphView />
+        </DataTemplate>
+        <DataTemplate DataType="vm:TimelineViewModel">
+            <views:TimelineView />
+        </DataTemplate>
+    </Application.DataTemplates>
+
+</Application>

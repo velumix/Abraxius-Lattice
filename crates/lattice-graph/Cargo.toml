@@ -1,0 +1,15 @@
+[package]
+name = "lattice-graph"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+lattice-model = { path = "../lattice-model" }
+lattice-resource = { path = "../lattice-resource" }
+petgraph.workspace = true
+serde.workspace = true
+
+[lints]
+workspace = true

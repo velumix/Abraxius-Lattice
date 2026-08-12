@@ -1,0 +1,71 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Abraxius.Lattice.Controls"
+    xmlns:vm="using:Abraxius.Lattice.ViewModels"
+    x:Class="Abraxius.Lattice.Views.EditorView"
+    x:DataType="vm:EditorViewModel">
+
+    <Grid RowDefinitions="38,28,*,26" Background="{DynamicResource Lattice.Background}">
+        <Border
+            Grid.Row="0"
+            Background="{DynamicResource Lattice.Surface}"
+            BorderBrush="{DynamicResource Lattice.Border}"
+            BorderThickness="0,0,0,1">
+            <Grid ColumnDefinitions="*,Auto" Margin="10,0">
+                <TextBlock
+                    Classes="SectionTitle"
+                    VerticalAlignment="Center"
+                    Text="{Binding DocumentName}" />
+                <TextBlock
+                    Grid.Column="1"
+                    Classes="Meta"
+                    VerticalAlignment="Center"
+                    Text="{Binding NativeStatus}" />
+            </Grid>
+        </Border>
+
+        <Border
+            Grid.Row="1"
+            Padding="10,0"
+            Background="{DynamicResource Lattice.Surface}"
+            BorderBrush="{DynamicResource Lattice.Border}"
+            BorderThickness="0,0,0,1">
+            <TextBlock
+                Classes="Meta"
+                VerticalAlignment="Center"
+                Text="{Binding DocumentPath}"
+                TextTrimming="CharacterEllipsis" />
+        </Border>
+
+        <controls:EditorSurface
+            Grid.Row="2"
+            Session="{Binding}"
+            Background="{DynamicResource Lattice.CodeBackground}"
+            Foreground="{DynamicResource Lattice.TextPrimary}"
+            GutterForeground="{DynamicResource Lattice.TextMuted}"
+            SelectionBrush="{DynamicResource Lattice.AccentMuted}"
+            AccentBrush="{DynamicResource Lattice.Accent}"
+            FontSize="14" />
+
+        <Border
+            Grid.Row="3"
+            Padding="10,0"
+            Background="{DynamicResource Lattice.Surface}"
+            BorderBrush="{DynamicResource Lattice.Border}"
+            BorderThickness="0,1,0,0">
+            <Grid ColumnDefinitions="*,Auto">
+                <TextBlock
+                    Classes="Meta"
+                    VerticalAlignment="Center"
+                    Text="{Binding DiagnosticsText}"
+                    TextTrimming="CharacterEllipsis" />
+                <TextBlock
+                    Grid.Column="1"
+                    Classes="Meta"
+                    VerticalAlignment="Center"
+                    Text="Luau · UTF-8 · native buffer" />
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

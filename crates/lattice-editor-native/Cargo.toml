@@ -1,0 +1,27 @@
+[package]
+name = "lattice-editor-native"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+lattice-editor-core = { path = "../lattice-editor-core" }
+lattice-luau = { path = "../lattice-luau" }
+serde.workspace = true
+serde_json.workspace = true
+
+[lints.rust]
+unsafe_code = "allow"
+
+[lints.clippy]
+all = "warn"
+pedantic = "warn"
+unwrap_used = "deny"
+expect_used = "deny"
+panic = "deny"

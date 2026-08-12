@@ -1,0 +1,6 @@
+[submodule "native/luau"]
+	path = native/luau
+	url = https://github.com/luau-lang/luau.git
+[submodule "vendor/fusion"]
+	path = vendor/fusion
+	url = https://github.com/dphfox/Fusion.git

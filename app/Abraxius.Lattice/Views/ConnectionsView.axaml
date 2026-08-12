@@ -1,0 +1,40 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:Abraxius.Lattice.ViewModels"
+    x:Class="Abraxius.Lattice.Views.ConnectionsView"
+    x:DataType="vm:ConnectionsViewModel">
+    <Grid Margin="20" RowDefinitions="Auto,16,*">
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
+            <StackPanel>
+                <TextBlock Classes="PageTitle" Text="Connections" />
+                <TextBlock Classes="Secondary" Margin="0,3,0,0" Text="Providers connected to the Lattice tool fabric." />
+            </StackPanel>
+            <Button Grid.Column="1" Classes="Primary" Command="{Binding AddProviderCommand}" Content="Add provider" />
+        </Grid>
+        <ListBox Grid.Row="2" Classes="DenseList" ItemsSource="{Binding Providers}" SelectedItem="{Binding SelectedProvider}">
+            <ListBox.ItemTemplate>
+                <DataTemplate x:DataType="vm:ProviderItemViewModel">
+                    <Border MinHeight="62" Padding="14,10" BorderBrush="{DynamicResource Lattice.Border}" BorderThickness="0,0,0,1">
+                        <Grid ColumnDefinitions="28,*,Auto,90,90">
+                            <Ellipse Grid.Column="0" Width="8" Height="8" HorizontalAlignment="Center" VerticalAlignment="Center" Fill="{Binding HealthBrush}" />
+                            <StackPanel Grid.Column="1" Margin="8,0,0,0" VerticalAlignment="Center" Spacing="2">
+                                <TextBlock Classes="SectionTitle" Text="{Binding Name}" />
+                                <TextBlock Classes="Meta" Text="{Binding TransportText}" />
+                            </StackPanel>
+                            <TextBlock Grid.Column="2" Classes="Secondary" Margin="12,0" VerticalAlignment="Center" Text="{Binding HealthText}" />
+                            <StackPanel Grid.Column="3" VerticalAlignment="Center">
+                                <TextBlock Classes="Meta" Text="LATENCY" />
+                                <TextBlock Classes="Secondary" Text="{Binding LatencyText}" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="4" VerticalAlignment="Center">
+                                <TextBlock Classes="Meta" Text="TOOLS" />
+                                <TextBlock Classes="Secondary" Text="{Binding ToolCountText}" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</UserControl>

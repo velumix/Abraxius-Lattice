@@ -1,0 +1,17 @@
+[package]
+name = "lattice-luau-sys"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+links = "lattice_luau"
+build = "build.rs"
+
+[dependencies]
+cxx.workspace = true
+
+[build-dependencies]
+cxx-build.workspace = true
+
+[lints.rust]
+unsafe_code = "allow"

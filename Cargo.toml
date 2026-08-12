@@ -1,0 +1,79 @@
+[workspace]
+resolver = "3"
+members = [
+    "crates/lattice-cli",
+    "crates/lattice-connections",
+    "crates/lattice-core",
+    "crates/lattice-daemon-ipc",
+    "crates/lattice-daemon",
+    "crates/lattice-docgen",
+    "crates/lattice-editor-core",
+    "crates/lattice-editor-native",
+    "crates/lattice-graph",
+    "crates/lattice-luau",
+    "crates/lattice-luau-sys",
+    "crates/lattice-mcp",
+    "crates/lattice-model",
+    "crates/lattice-platform",
+    "crates/lattice-resource",
+    "crates/lattice-search",
+    "crates/lattice-storage",
+    "crates/lattice-studio",
+    "crates/lattice-studio-bridge",
+    "crates/lattice-tools",
+]
+exclude = ["vendor/lru"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.97"
+publish = false
+authors = ["Abraxius Lattice contributors"]
+repository = "https://github.com/abraxius/lattice"
+
+[workspace.dependencies]
+axum = { version = "=0.8.9", default-features = false, features = ["http1", "json", "tokio", "tracing"] }
+blake3 = "=1.8.6"
+clap = { version = "=4.6.6", features = ["derive"] }
+cxx = { version = "=1.0.199", features = ["c++20"] }
+cxx-build = "=1.0.199"
+dirs = "=6.0.0"
+petgraph = { version = "=0.8.3", default-features = false, features = ["std", "stable_graph"] }
+proptest = "=1.11.0"
+ropey = { version = "=1.6.1", default-features = true }
+rmcp = { version = "=3.1.2", default-features = false, features = ["client", "macros", "server", "transport-async-rw", "transport-io"] }
+rusqlite = { version = "=0.40.2", default-features = false, features = ["bundled"] }
+serde = { version = "=1.0.229", features = ["derive"] }
+serde_json = "=1.0.151"
+sysinfo = { version = "=0.39.6", default-features = false, features = ["system"] }
+tantivy = { version = "=0.26.1", default-features = false, features = ["lz4-compression", "mmap"] }
+tempfile = "=3.27.0"
+thiserror = "=2.0.20"
+tokio = { version = "=1.53.1", features = ["fs", "io-std", "io-util", "macros", "net", "process", "rt-multi-thread", "signal", "sync", "time"] }
+tracing = "=0.1.44"
+tracing-subscriber = { version = "=0.3.23", features = ["env-filter", "fmt"] }
+uuid = { version = "=1.24.0", features = ["serde", "v7"] }
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+unused_must_use = "deny"
+
+[workspace.lints.clippy]
+all = { level = "warn", priority = -1 }
+pedantic = { level = "warn", priority = -1 }
+unwrap_used = "deny"
+expect_used = "deny"
+panic = "deny"
+missing_errors_doc = "allow"
+too_many_lines = "allow"
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
+strip = "symbols"
+
+# Tantivy 0.26.1 constrains lru to 0.16.x. This exact local source contains the
+# upstream panic-safety fix merged as lru-rs PR #238; see docs/SECURITY_AUDIT.md.
+[patch.crates-io]
+lru = { path = "vendor/lru" }

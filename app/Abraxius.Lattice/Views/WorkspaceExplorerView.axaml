@@ -1,0 +1,55 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:vm="using:Abraxius.Lattice.ViewModels"
+    x:Class="Abraxius.Lattice.Views.WorkspaceExplorerView"
+    x:DataType="vm:WorkspaceExplorerViewModel">
+    <Grid RowDefinitions="Auto,*,Auto" Margin="8">
+        <TextBlock
+            Classes="Meta"
+            Margin="6,4,6,10"
+            Text="{Binding RootPath}"
+            TextTrimming="CharacterEllipsis"
+            ToolTip.Tip="{Binding RootPath}" />
+
+        <TreeView
+            Grid.Row="1"
+            ItemsSource="{Binding Nodes}"
+            SelectedItem="{Binding SelectedNode, Mode=TwoWay}"
+            TreeViewItem.Expanded="OnTreeItemExpanded"
+            DoubleTapped="OnTreeItemDoubleTapped"
+            SelectionChanged="OnTreeSelectionChanged">
+            <TreeView.ItemTemplate>
+                <TreeDataTemplate
+                    x:DataType="vm:ExplorerNodeViewModel"
+                    ItemsSource="{Binding Children}">
+                    <Grid
+                        ColumnDefinitions="18,*"
+                        Margin="4,3"
+                        PointerPressed="OnTreeNodePointerPressed">
+                        <materialIcons:MaterialIcon
+                            Width="14"
+                            Height="14"
+                            VerticalAlignment="Center"
+                            Foreground="{DynamicResource Lattice.TextSecondary}"
+                            Kind="{Binding IconKind}" />
+                        <TextBlock
+                            Grid.Column="1"
+                            Classes="Body"
+                            VerticalAlignment="Center"
+                            Text="{Binding Name}"
+                            TextTrimming="CharacterEllipsis" />
+                    </Grid>
+                </TreeDataTemplate>
+            </TreeView.ItemTemplate>
+        </TreeView>
+
+        <TextBlock
+            Grid.Row="2"
+            Classes="Meta"
+            Margin="6,10,6,4"
+            Text="{Binding Status}"
+            TextTrimming="CharacterEllipsis" />
+    </Grid>
+</UserControl>
